@@ -27,7 +27,7 @@ def calculate_score(image_path):
 def batch_process_images(folder_path, batch_size=50):
     # 获取文件夹下的所有图片文件路径
     image_files = []
-    for ext in ('.png', '.jpg', '.jpeg', '.gif', '.bmp'):
+    for ext in ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'):
         image_files.extend(glob.glob(os.path.join(folder_path, '*' + ext)))
     
     total_images = len(image_files)
@@ -101,7 +101,8 @@ if __name__ == "__main__":
 
     # 如果图片数量超过50，进行分批次处理
     if image_count > 22:
-        subprocess.run([os.path.join(scriptPath, 'waterfall_local_auto.py'), folder_path])
+        python_executable = sys.executable  # 获取当前Python解释器路径
+        subprocess.run([python_executable, os.path.join(scriptPath, 'waterfall_local_auto.py'), folder_path])
         print("Number of images is greater than 22. Using waterfall_local.py.")
     elif image_count > 3:
         batch_process_images(folder_path)
