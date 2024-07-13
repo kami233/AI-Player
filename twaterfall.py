@@ -7,6 +7,10 @@ import tempfile
 from PIL import Image
 import random
 
+# 定义脚本路径
+scriptPath = "D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401\\"
+batPath = "C:\\Users\\Administrator\\Desktop\\"
+
 def calculate_score(image_path):
     # 计算图片的分数
     img = Image.open(image_path)
@@ -64,15 +68,15 @@ def batch_process_images(folder_path, batch_size=50):
             
             # 根据批次的分数选择不同的处理脚本
             if batch_score > 20:
-                subprocess.run(['python', 'D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401\\waterfall.py', batch_temp_dir])
+                subprocess.run(['python', os.path.join(scriptPath, 'waterfall.py'), batch_temp_dir])
             elif 13 <= batch_score <= 20:
-                subprocess.run(['python', 'D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401\\waterfall_5col.py', batch_temp_dir])
+                subprocess.run(['python', os.path.join(scriptPath, 'waterfall_5col.py'), batch_temp_dir])
             elif 7 <= batch_score <= 12:
-                subprocess.run(['python', 'D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401\\waterfall_4col.py', batch_temp_dir])
+                subprocess.run(['python', os.path.join(scriptPath, 'waterfall_4col.py'), batch_temp_dir])
             elif 4 <= batch_score <= 6:
-                subprocess.run(['python', 'D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401\\waterfall_3col.py', batch_temp_dir])
+                subprocess.run(['python', os.path.join(scriptPath, 'waterfall_3col.py'), batch_temp_dir])
             else:
-                subprocess.run(['C:\\Users\\Administrator\\Desktop\\ffplayAI.bat', batch_temp_dir])
+                subprocess.run([os.path.join(batPath, 'ffplayAI.bat'), batch_temp_dir], shell=True)
             
             batch_index += 1
     
@@ -96,8 +100,15 @@ if __name__ == "__main__":
     print(f"Total images detected in '{folder_path}': {image_count}")
 
     # 如果图片数量超过50，进行分批次处理
-    if image_count > 3:
+    if image_count > 22:
+        subprocess.run([os.path.join(scriptPath, 'waterfall_local_auto.py'), folder_path])
+        print("Number of images is greater than 22. Using waterfall_local.py.")
+    elif image_count > 3:
         batch_process_images(folder_path)
     else:
-        subprocess.run(['C:\\Users\\Administrator\\Desktop\\ffplayAI.bat', folder_path])
-        print("Number of images is less than or equal to 50. Not batching.")
+        try:
+            subprocess.run(['python', os.path.join(scriptPath, 'waterfall_local_auto.py'), folder_path], check=True)
+            print("Number of images is less than or equal to 50. Not batching.")
+        except subprocess.CalledProcessError:
+            print("First subprocess call failed. Running second command.")
+            subprocess.run([os.path.join(batPath, 'ffplayAI.bat'), folder_path])
