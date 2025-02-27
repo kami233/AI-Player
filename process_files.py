@@ -7,7 +7,7 @@ from PIL import Image
 
 # --- 全局配置 ---
 BASE_DIR = "D:\\Epic\\Animesave\\hev-ren1_20220312_0911.35401"  # 基础路径
-CHROME_OPEN_SCRIPT = os.path.join(BASE_DIR, "open_image_with_chrome.py")  # Chrome打开脚本
+CHROME_OPEN_SCRIPT = os.path.join(BASE_DIR, "long_image.py")  # Chrome打开脚本
 WATERFALL_SP_SCRIPT = os.path.join(BASE_DIR, "waterfall_sp.py")  # waterfall_sp.py 脚本
 FFPLAYAGI_BAT = "C:\\Users\\Administrator\\Desktop\\ffplayAGI.bat"  # ffplayAGI.bat 路径
 
